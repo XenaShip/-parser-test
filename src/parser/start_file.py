@@ -1,5 +1,7 @@
 from .fetch_url import fetch_html
 from .links import extract_links
+from .site_crawl import crawl
+from .contacts import extract_emails, extract_phones
 
 def parse_site(start_url):
     return {
@@ -8,17 +10,12 @@ def parse_site(start_url):
         "phones": [],
     }
 
+text = """
+Contact us:
+email: test@gmail.com
+phone: +7 (999) 123-45-67
+phone: 8 495 111 22 33
+"""
 
-start_url = "https://example.com"
-
-html = fetch_html(start_url)
-
-if not html:
-    print("Не удалось загрузить страницу")
-    exit()
-
-links = extract_links(html, start_url)
-
-print("Найденные ссылки:")
-for link in links:
-    print(link)
+print(extract_emails(text))
+print(extract_phones(text))
