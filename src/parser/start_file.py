@@ -1,4 +1,5 @@
 from .fetch_url import fetch_html
+from .links import extract_links
 
 def parse_site(start_url):
     return {
@@ -7,19 +8,17 @@ def parse_site(start_url):
         "phones": [],
     }
 
-html1 = fetch_html("https://hh.ru/vacancy/129638161?hhtmFrom=chat")
 
-if html1:
-    print("скачено")
-    print(html1[:500])
-else:
-    print("не удалось загрузить страницу")
+start_url = "https://example.com"
 
+html = fetch_html(start_url)
 
-html2 = fetch_html("https://example.com")
+if not html:
+    print("Не удалось загрузить страницу")
+    exit()
 
-if html2:
-    print("скачено")
-    print(html2[:500])
-else:
-    print("не удалось загрузить страницу")
+links = extract_links(html, start_url)
+
+print("Найденные ссылки:")
+for link in links:
+    print(link)
