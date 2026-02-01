@@ -33,7 +33,7 @@ def main():
         print("Неожиданная ошибка во время работы парсера:", e)
         return
 
-    print("✅ Результат:")
+    print("Результат:")
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
