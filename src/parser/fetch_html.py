@@ -1,5 +1,6 @@
 import requests
-
+import logging
+logger = logging.getLogger(__name__)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -19,5 +20,5 @@ def fetch_html(url):
         response.raise_for_status()
         return response.text
     except requests.RequestException as e:
-        print(f"Ошибка при загрузке {url}: {e}")
+        logger.warning("FAILED URL: %s (%s)", url, e)
         return None

@@ -1,7 +1,7 @@
 import sys
 import json
 from urllib.parse import urlparse
-
+import logging
 from .start_file import parse_site
 
 
@@ -10,30 +10,36 @@ def is_valid_url(url):
     return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+
 def main():
     if len(sys.argv) >= 2:
         start_url = sys.argv[1].strip()
     else:
-        start_url = input("Введите стартовый URL сайта: ").strip()
+        start_url = input("URL: ").strip()
 
     if not start_url:
-        print("Ошибка: URL не введён")
+        print("error, incorrect URL")
         return
 
     if not is_valid_url(start_url):
-        print("Ошибка: введён некорректный URL")
-        print("Пример правильного ввода: https://github.com/XenaShip")
+        print("error, incorrect URL")
+        print("exaple: https://github.com/XenaShip")
         return
 
-    print("\nПарсер запущен...\n")
+    print("\nStart...\n")
 
     try:
         result = parse_site(start_url)
     except Exception as e:
-        print("Неожиданная ошибка во время работы парсера:", e)
+        print("Exeption:", e)
         return
 
-    print("Результат:")
+    print("Result:")
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

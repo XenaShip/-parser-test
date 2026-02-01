@@ -1,30 +1,42 @@
 from parser.contacts import extract_emails, extract_phones
 
 
-def test_extract_emails_basic():
-    text = "Contact: xenaship@gmail.com and shipxena2003@site.ru"
+def test_email_ok():
+    text = "xena@ship.test"
     emails = extract_emails(text)
-
-    assert "xenaship@gmail.com" in emails
-    assert "shipxena2003@site.ru" in emails
+    assert "xena@ship.test" in emails
 
 
-def test_extract_emails_removes_placeholder():
-    text = "Example email: you@domain.com"
+def test_email_ignore_js():
+    text = "ship@3.5.7"
     emails = extract_emails(text)
+    assert len(emails) == 0
 
-    assert "you@domain.com" not in emails
+
+def test_email_mix():
+    text = "ship@3.5.7 xena@ship.test"
+    emails = extract_emails(text)
+    assert "xena@ship.test" in emails
+    assert "ship@3.5.7" not in emails
 
 
-def test_extract_phones_valid():
-    text = "Call Xena Ship: +7 (999) 123-45-67"
+def test_phone_ok():
+    text = "+7 (200) 300-03-03"
     phones = extract_phones(text)
+    assert "+72003000303" in phones
 
-    assert "+79991234567" in phones
 
-
-def test_extract_phones_ignores_ids():
-    text = "XenaShip internal id: 838860816777213 should not be a phone"
+def test_phone_ignore_big_number():
+    text = "20032003200320032003"
     phones = extract_phones(text)
+    assert len(phones) == 0
 
+
+def test_phone_empty():
+    phones = extract_phones("")
+    assert phones == set()
+
+def test_phone_ignore_digits():
+    text = "1704837122"
+    phones = extract_phones(text)
     assert len(phones) == 0
