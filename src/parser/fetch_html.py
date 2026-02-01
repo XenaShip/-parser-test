@@ -17,9 +17,7 @@ def fetch_html(url):
             headers=HEADERS,
         )
         response.raise_for_status()
-
         return response.text
-
     except requests.RequestException as e:
         print(f"Ошибка при загрузке {url}: {e}")
         return None

@@ -2,35 +2,40 @@ from collections import deque
 from urllib.parse import urlparse, urldefrag
 import time
 
-from .fetch_url import fetch_html
+from .fetch_html import fetch_html
 from .links import extract_links
+from .contacts import extract_emails, extract_phones
 
 
-def crawl(start_url, max_pages=10, delay=1):
+def crawl(start_url, max_pages=10, delay=0.5):
     visited = set()
     queue = deque([start_url])
+    emails = set()
+    phones = set()
     domain = urlparse(start_url).netloc
     while queue and len(visited) < max_pages:
         url = queue.popleft()
-        result = urldefrag(url)
-        url = result[0]
+        url = urldefrag(url)[0]
         if url in visited:
             continue
-        print("Обходим:", url)
         visited.add(url)
         html = fetch_html(url)
         if not html:
             continue
-        time.sleep(delay)
-        links = extract_links(html, url)
+        emails.update(extract_emails(html))
+        phones.update(extract_phones(html))
+        try:
+            links = extract_links(html, url)
+        except Exception:
+            continue
         for link in links:
-            result = urldefrag(link)
-            link = result[0]
-            parsed_link = urlparse(link)
-            if parsed_link.netloc != domain:
+            link = urldefrag(link)[0]
+            parsed = urlparse(link)
+            if parsed.netloc != domain:
                 continue
-            if parsed_link.query:
+            if parsed.query:
                 continue
             if link not in visited:
                 queue.append(link)
-    return visited
+        time.sleep(delay)
+    return emails, phones
