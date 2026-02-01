@@ -3,6 +3,8 @@ from urllib.parse import urljoin
 
 
 def extract_links(html, base_url):
+    if not html:
+        return []
     soup = BeautifulSoup(html, "html.parser")
     links = []
     for tag in soup.find_all("a"):
@@ -17,5 +19,4 @@ def extract_links(html, base_url):
             continue
         full_url = urljoin(base_url, href)
         links.append(full_url)
-
     return links

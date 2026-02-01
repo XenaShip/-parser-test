@@ -1,24 +1,12 @@
-from .fetch_url import fetch_html
+from .fetch_html import fetch_html
 from .links import extract_links
+from .site_crawl import crawl
+from .contacts import extract_emails, extract_phones
 
 def parse_site(start_url):
+    emails, phones = crawl(start_url, max_pages=5, delay=0)
     return {
         "url": start_url,
-        "emails": [],
-        "phones": [],
+        "emails": sorted(emails),
+        "phones": sorted(phones),
     }
-
-
-start_url = "https://example.com"
-
-html = fetch_html(start_url)
-
-if not html:
-    print("Не удалось загрузить страницу")
-    exit()
-
-links = extract_links(html, start_url)
-
-print("Найденные ссылки:")
-for link in links:
-    print(link)
