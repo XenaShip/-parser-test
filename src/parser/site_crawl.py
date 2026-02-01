@@ -10,7 +10,7 @@ from .contacts import extract_emails, extract_phones
 logger = logging.getLogger(__name__)
 
 
-def crawl(start_url, max_pages=10, delay=0.5):
+def crawl(start_url, max_pages=30, delay=0.5):
     visited = set()
     queue = deque([start_url])
     emails = set()
@@ -44,6 +44,8 @@ def crawl(start_url, max_pages=10, delay=0.5):
             if link not in visited:
                 queue.append(link)
         time.sleep(delay)
-    logger.info("Crawling finished",
-                len(emails), len(phones))
+    logger.info(
+        "Crawling finished. Found %d emails, %d phones",
+        len(emails), len(phones)
+    )
     return emails, phones
