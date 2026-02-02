@@ -80,7 +80,7 @@ ________________________________________________
 https://github.com/XenaShip/-parser-test
 вывод:
 
-Результат:
+Result::
 {
   "url": "https://github.com/XenaShip/-parser-test",
   "emails": [
@@ -116,4 +116,5 @@ __________________________________________________________________________
 
 telegram: @xenaship
 почта: shipxena@gmail.com
+
 
